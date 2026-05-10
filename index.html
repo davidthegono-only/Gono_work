@@ -27,10 +27,42 @@
 
       text-align: center;
 
-      font-family: Arial;
+      font-family: Arial;}
+   
+.contenedor-botones{
 
-    }
+  display: flex;
 
+  gap: 50px;
+
+  margin-top: 40px;
+
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+}
+
+.imagen-boton{
+
+  width: 280px;
+
+  border-radius: 20px;
+
+  transition: 0.3s;
+
+  cursor: pointer;
+
+  box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
+
+}
+
+.imagen-boton:hover{
+
+  transform: scale(1.05);
+
+}
+    
   </style>
 
 </head>
@@ -45,9 +77,27 @@
     Bienvenidos, por favor realicen el preoperacional para que puedan seguir con la programación del viaje.
   </p>
 
-  <button>
-    Contactar
-  </button>
+  <div class="contenedor-botones">
+
+  <a href="https://forms.gle/xziwC39ivLZt1ikA6" target="_blank">
+
+    <img 
+      src="img/Boton_propios.png"
+      class="imagen-boton"
+    >
+
+  </a>
+
+  <a href="https://forms.gle/ChtT4hq1fsSRgfov8" target="_blank">
+
+    <img 
+      src="img/Boton_terceros.png"
+      class="imagen-boton"
+    >
+
+  </a>
+
+</div>
 
 </body>
 
