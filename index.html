@@ -1,97 +1,85 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
-
-  <title>Setrans|Preoperacional</title>
+  <title>Setrans | Preoperacional</title>
   <link rel="icon" href="img/Favicon-removebg-preview.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-
     body{
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
 
-  background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
-  url('img/Preoperacional.png');
+      background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+      url('img/Preoperacional.png');
 
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
 
-  font-family: Arial;
-  color: white;
-}
+      font-family: Arial;
+      color: white;
+    }
 
     .formulario{
-  width: 90%;
-  max-width: 420px;
+      width: 90%;
+      max-width: 420px;
 
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(10px);
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(10px);
 
-  padding: 25px;
-  border-radius: 18px;
+      padding: 25px;
+      border-radius: 18px;
 
-  box-shadow: 0 0 25px rgba(0,0,0,0.4);
+      box-shadow: 0 0 25px rgba(0,0,0,0.4);
 
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     input, select, button{
-  width: 100%;
-  box-sizing: border-box;
+      width: 100%;
+      box-sizing: border-box;
 
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
 
-  font-size: 15px;
-  outline: none;
+      font-size: 15px;
+      outline: none;
     }
 
-   button{
-  background: #0a8f08;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
+    button{
+      background: #0a8f08;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
 
-  transition: 0.2s;
-}
-
-button:hover{
-  background: #0fb10f;
-}
-
+    button:hover{
+      background: #0fb10f;
+    }
   </style>
-
 </head>
 
 <body>
 
   <h1>PREOPERACIONALES | SETRANSCARGA SAS</h1>
-
   <h2>Estimados Conductores</h2>
 
-  <p>
-    ¡Bienvenidos, diligencie el preoperacional antes del viaje!
-  </p>
+  <p>¡Bienvenidos, diligencie el preoperacional antes del viaje!</p>
 
-  <!-- 🔥 FORMULARIO NUEVO -->
   <div class="formulario">
 
     <input type="text" id="conductor" placeholder="Nombre conductor">
-
     <input type="text" id="placa" placeholder="Placa ABC123">
-
     <input type="number" id="km" placeholder="Kilometraje actual">
 
     <select id="autorizador">
@@ -108,7 +96,6 @@ button:hover{
   <audio id="clickSound" src="sound/Click.mp3" preload="auto"></audio>
 
   <script>
-
     const sound = document.getElementById("clickSound");
 
     function playSound(){
@@ -120,8 +107,8 @@ button:hover{
     const placa = document.getElementById("placa");
     const km = document.getElementById("km");
 
+    // Formato general (solo conductor)
     function formatInput(input){
-
       input.addEventListener("input", function () {
         this.value = this.value.replace(/\s+/g, " ").trimStart().toUpperCase();
       });
@@ -129,12 +116,22 @@ button:hover{
       input.addEventListener("blur", function () {
         this.value = this.value.trim().toUpperCase();
       });
-
     }
 
     formatInput(conductor);
-    formatInput(placa);
 
+    // Placa (regla estricta: sin espacios)
+    placa.addEventListener("input", function () {
+      this.value = this.value
+        .toUpperCase()
+        .replace(/\s/g, "");
+    });
+
+    placa.addEventListener("blur", function () {
+      this.value = this.value.trim().toUpperCase();
+    });
+
+    // Validación placa
     function validarPlaca(valor){
       return /^[A-Z]{3}[0-9]{3}$/.test(valor);
     }
@@ -143,24 +140,31 @@ button:hover{
 
       playSound();
 
+      if(conductor.value.trim() === ""){
+        alert("Debe ingresar el nombre del conductor");
+        return;
+      }
+
       if(!validarPlaca(placa.value)){
-        alert("Placa inválida (ABC123)");
+        alert("Placa inválida (formato ABC123)");
         return;
       }
 
       let kmValue = parseInt(km.value);
 
-      if(kmValue <= 0 || kmValue > 2000000){
+      if(isNaN(kmValue) || kmValue <= 0 || kmValue > 2000000){
         alert("Kilometraje no válido");
         return;
       }
 
+      if(document.getElementById("autorizador").value === ""){
+        alert("Debe seleccionar un autorizador");
+        return;
+      }
+
       alert("Preoperacional enviado correctamente");
-
     });
-
   </script>
 
 </body>
-
 </html>
