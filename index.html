@@ -2,37 +2,24 @@
 <html>
 
 <head>
-
-  <title>Setrans | Preoperacional</title>
-  <link rel="icon" href="img/Favicon-removebg-preview.png">
+  <title>Preoperacional | Setrans</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
 
     body{
-      background: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('img/Preoperacional.png');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      min-height: 100vh;
+      background: #111;
       color: white;
       font-family: Arial;
-
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      flex-direction: column;
-
       padding: 20px;
     }
 
-    .formulario{
-      background: rgba(0,0,0,0.75);
+    .container{
+      max-width: 600px;
+      margin: auto;
+      background: #1c1c1c;
       padding: 20px;
       border-radius: 15px;
-      width: 100%;
-      max-width: 500px;
-      margin-top: 20px;
     }
 
     input, select, button{
@@ -47,85 +34,77 @@
     button{
       background: green;
       color: white;
-      cursor: pointer;
       font-weight: bold;
     }
 
-    button:disabled{
-      background: gray;
-      cursor: not-allowed;
-    }
-
-    h1, h2, p{
-      text-align: center;
-    }
-
   </style>
-
 </head>
 
 <body>
 
-  <h1>PREOPERACIONALES | SETRANSCARGA SAS</h1>
+<div class="container">
 
-  <h2>Estimados Conductores</h2>
+  <h2>PREOPERACIONAL VEHÍCULO DE CARGA</h2>
 
-  <p>
-    Diligencie el siguiente formulario para continuar con su preoperacional.
-  </p>
+  <input type="text" id="conductor" placeholder="Nombre conductor">
 
-  <div class="formulario">
+  <input type="text" id="placa" placeholder="Placa ABC123">
 
-    <input type="text" id="conductor" placeholder="Nombre del conductor">
+  <input type="number" id="km" placeholder="Kilometraje actual">
 
-    <input type="text" id="placa" placeholder="Placa del vehículo (ABC123)">
+  <select id="autorizador">
+    <option value="">Persona que autoriza</option>
+    <option>JOSE LUIS MEDINA</option>
+    <option>MARIO AGUILAR</option>
+    <option>LUIS PEREZ</option>
+  </select>
 
-    <select id="tipo">
-      <option value="">Tipo de vehículo</option>
-      <option>Propio</option>
-      <option>Tercero</option>
-    </select>
+  <button id="enviar">Enviar</button>
 
-    <h3>Fotos obligatorias</h3>
+</div>
 
-    <input type="file" accept="image/*" capture="environment" id="foto1">
-    <input type="file" accept="image/*" capture="environment" id="foto2">
+<script>
 
-    <button id="enviar">Enviar Preoperacional</button>
+  const conductor = document.getElementById("conductor");
+  const placa = document.getElementById("placa");
+  const km = document.getElementById("km");
 
-  </div>
+  // MAYÚSCULAS + TRIM AUTOMÁTICO
+  function formatInput(input){
+    input.addEventListener("input", function(){
+      this.value = this.value.trimStart().toUpperCase();
+    });
+  }
 
-  <audio id="clickSound" src="sound/Click.mp3" preload="auto"></audio>
+  formatInput(conductor);
+  formatInput(placa);
 
-  <script>
+  // VALIDACIÓN PLACA
+  function validarPlaca(valor){
+    return /^[A-Z]{3}[0-9]{3}$/.test(valor);
+  }
 
-    const sound = document.getElementById("clickSound");
+  document.getElementById("enviar").addEventListener("click", function(){
 
-    function playSound(){
-      sound.currentTime = 0;
-      sound.play();
+    let kmValue = parseInt(km.value);
+
+    // validación placa
+    if(!validarPlaca(placa.value)){
+      alert("Placa inválida. Debe ser ABC123");
+      return;
     }
 
-    document.getElementById("enviar").addEventListener("click", function(){
+    // validación km básico (sin base de datos aún)
+    if(kmValue <= 0 || kmValue > 2000000){
+      alert("Kilometraje no válido");
+      return;
+    }
 
-      playSound();
+    alert("Formulario válido - enviado");
 
-      const placa = document.getElementById("placa").value;
+  });
 
-      const foto1 = document.getElementById("foto1").files.length;
-      const foto2 = document.getElementById("foto2").files.length;
-
-      if(!placa || foto1 === 0 || foto2 === 0){
-        alert("Complete todos los campos y suba mínimo 2 fotos");
-        return;
-      }
-
-      alert("Preoperacional enviado correctamente");
-
-    });
-
-  </script>
+</script>
 
 </body>
-
 </html>
