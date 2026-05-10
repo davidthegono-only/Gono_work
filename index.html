@@ -1,1 +1,175 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+  <title>Login | Sistema HSEQ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body{
+      margin:0;
+      font-family: Arial;
+      color:white;
+      background: url("img/Foto1.jpg") no-repeat center center/cover;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .card{
+      width:90%;
+      max-width:420px;
+      background:rgba(0,0,0,0.7);
+      padding:20px;
+      border-radius:15px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      backdrop-filter: blur(8px);
+    }
+
+    input, select, button{
+      padding:12px;
+      border:none;
+      border-radius:8px;
+      font-size:14px;
+      outline:none;
+    }
+
+    button{
+      background:green;
+      color:white;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#0fb10f;
+    }
+
+    .hidden{
+      display:none;
+    }
+  </style>
+</head>
+
+<body>
+
+<audio id="clickSound" src="sound/Click.mp3"></audio>
+
+<!-- LOGIN -->
+<div class="card" id="loginBox">
+
+  <h3>INICIO DE SESIÓN</h3>
+
+  <input id="email" placeholder="Correo electrónico">
+
+  <button onclick="sendCode()">Enviar código</button>
+
+  <input id="codeInput" placeholder="Código recibido">
+
+  <button onclick="verifyCode()">Ingresar</button>
+
+</div>
+
+<!-- PERFIL -->
+<div class="card hidden" id="profileBox">
+
+  <h3>CONFIGURACIÓN DE PERFIL</h3>
+
+  <input id="empresa" placeholder="Empresa">
+  <input id="nombre" placeholder="Nombre">
+  <input id="apellidos" placeholder="Apellidos">
+
+  <select id="pais">
+    <option value="">Código país</option>
+    <option value="+57">Colombia +57</option>
+    <option value="+52">México +52</option>
+    <option value="+1">USA +1</option>
+    <option value="+34">España +34</option>
+  </select>
+
+  <input id="celular" placeholder="Número celular (10 dígitos)">
+
+  <input id="cargo" placeholder="Cargo">
+
+  <button onclick="guardarPerfil()">Continuar</button>
+
+</div>
+
+<script>
+
+const sound = document.getElementById("clickSound");
+let generatedCode = "";
+
+function playSound(){
+  sound.currentTime = 0;
+  sound.play();
+}
+
+// --- LOGIN SIMULADO ---
+function sendCode(){
+  generatedCode = Math.floor(1000 + Math.random() * 9000);
+  alert("Tu código es: " + generatedCode);
+}
+
+function verifyCode(){
+  const input = document.getElementById("codeInput").value;
+
+  if(input == generatedCode && generatedCode != ""){
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("profileBox").classList.remove("hidden");
+  }else{
+    alert("Código incorrecto");
+  }
+}
+
+// --- FORMATO MAYÚSCULAS ---
+function formatUpper(input){
+  input.addEventListener("input", function(){
+    this.value = this.value.trimStart().toUpperCase();
+  });
+
+  input.addEventListener("blur", function(){
+    this.value = this.value.trim().toUpperCase();
+  });
+}
+
+formatUpper(document.getElementById("empresa"));
+formatUpper(document.getElementById("nombre"));
+formatUpper(document.getElementById("apellidos"));
+formatUpper(document.getElementById("cargo"));
+
+// --- CELULAR VALIDACIÓN ---
+const celular = document.getElementById("celular");
+
+celular.addEventListener("input", function(){
+  this.value = this.value.replace(/\D/g,""); // solo números
+});
+
+// --- PERFIL ---
+function guardarPerfil(){
+
+  playSound();
+
+  const pais = document.getElementById("pais").value;
+  const num = celular.value;
+
+  if(pais === ""){
+    alert("Selecciona código de país");
+    return;
+  }
+
+  if(num.length !== 10){
+    alert("El número debe tener 10 dígitos");
+    return;
+  }
+
+  alert("Perfil guardado correctamente");
+}
+
+</script>
+
+</body>
+</html>
