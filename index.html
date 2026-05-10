@@ -1,25 +1,37 @@
 <!DOCTYPE html>
+
 <html>
 
 <head>
-  <title>Preoperacional | Setrans</title>
+
+  <title>Setrans|Preoperacional</title>
+  <link rel="icon" href="img/Favicon-removebg-preview.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
 
     body{
-      background: #111;
+      background: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('img/Preoperacional.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 100vh;
       color: white;
       font-family: Arial;
-      padding: 20px;
+      display: flex;
+      justify-content: flex-start;
+      padding-top: 40px;
+      align-items: center;
+      flex-direction: column;
     }
 
-    .container{
-      max-width: 600px;
-      margin: auto;
-      background: #1c1c1c;
+    .formulario{
+      background: rgba(0,0,0,0.75);
       padding: 20px;
       border-radius: 15px;
+      width: 90%;
+      max-width: 500px;
+      margin-top: 20px;
     }
 
     input, select, button{
@@ -38,73 +50,95 @@
     }
 
   </style>
+
 </head>
 
 <body>
 
-<div class="container">
+  <h1>PREOPERACIONALES | SETRANSCARGA SAS</h1>
 
-  <h2>PREOPERACIONAL VEHÍCULO DE CARGA</h2>
+  <h2>Estimados Conductores</h2>
 
-  <input type="text" id="conductor" placeholder="Nombre conductor">
+  <p>
+    ¡Bienvenidos, diligencie el preoperacional antes del viaje!
+  </p>
 
-  <input type="text" id="placa" placeholder="Placa ABC123">
+  <!-- 🔥 FORMULARIO NUEVO -->
+  <div class="formulario">
 
-  <input type="number" id="km" placeholder="Kilometraje actual">
+    <input type="text" id="conductor" placeholder="Nombre conductor">
 
-  <select id="autorizador">
-    <option value="">Persona que autoriza</option>
-    <option>JOSE LUIS MEDINA</option>
-    <option>MARIO AGUILAR</option>
-    <option>LUIS PEREZ</option>
-  </select>
+    <input type="text" id="placa" placeholder="Placa ABC123">
 
-  <button id="enviar">Enviar</button>
+    <input type="number" id="km" placeholder="Kilometraje actual">
 
-</div>
+    <select id="autorizador">
+      <option value="">Persona que autoriza</option>
+      <option>JOSE LUIS MEDINA</option>
+      <option>MARIO AGUILAR</option>
+      <option>LUIS PEREZ</option>
+    </select>
 
-<script>
+    <button id="enviar">Enviar Preoperacional</button>
 
-  const conductor = document.getElementById("conductor");
-  const placa = document.getElementById("placa");
-  const km = document.getElementById("km");
+  </div>
 
-  // MAYÚSCULAS + TRIM AUTOMÁTICO
-  function formatInput(input){
-    input.addEventListener("input", function(){
-      this.value = this.value.trimStart().toUpperCase();
+  <audio id="clickSound" src="sound/Click.mp3" preload="auto"></audio>
+
+  <script>
+
+    const sound = document.getElementById("clickSound");
+
+    function playSound(){
+      sound.currentTime = 0;
+      sound.play();
+    }
+
+    const conductor = document.getElementById("conductor");
+    const placa = document.getElementById("placa");
+    const km = document.getElementById("km");
+
+    function formatInput(input){
+
+      input.addEventListener("input", function () {
+        this.value = this.value.replace(/\s+/g, " ").trimStart().toUpperCase();
+      });
+
+      input.addEventListener("blur", function () {
+        this.value = this.value.trim().toUpperCase();
+      });
+
+    }
+
+    formatInput(conductor);
+    formatInput(placa);
+
+    function validarPlaca(valor){
+      return /^[A-Z]{3}[0-9]{3}$/.test(valor);
+    }
+
+    document.getElementById("enviar").addEventListener("click", function(){
+
+      playSound();
+
+      if(!validarPlaca(placa.value)){
+        alert("Placa inválida (ABC123)");
+        return;
+      }
+
+      let kmValue = parseInt(km.value);
+
+      if(kmValue <= 0 || kmValue > 2000000){
+        alert("Kilometraje no válido");
+        return;
+      }
+
+      alert("Preoperacional enviado correctamente");
+
     });
-  }
 
-  formatInput(conductor);
-  formatInput(placa);
-
-  // VALIDACIÓN PLACA
-  function validarPlaca(valor){
-    return /^[A-Z]{3}[0-9]{3}$/.test(valor);
-  }
-
-  document.getElementById("enviar").addEventListener("click", function(){
-
-    let kmValue = parseInt(km.value);
-
-    // validación placa
-    if(!validarPlaca(placa.value)){
-      alert("Placa inválida. Debe ser ABC123");
-      return;
-    }
-
-    // validación km básico (sin base de datos aún)
-    if(kmValue <= 0 || kmValue > 2000000){
-      alert("Kilometraje no válido");
-      return;
-    }
-
-    alert("Formulario válido - enviado");
-
-  });
-
-</script>
+  </script>
 
 </body>
+
 </html>
