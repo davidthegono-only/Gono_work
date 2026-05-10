@@ -13,7 +13,7 @@
 body{margin:0;font-family:Arial;color:white;background:url("img/Foto1.jpg") no-repeat center center/cover;min-height:100vh;
 display:flex;justify-content:center;align-items:center;}
 
-/* # TARJETAS (LOGIN Y PERFIL) */
+/* # TARJETAS (PANTALLAS DEL SISTEMA) */
 .card{width:90%;max-width:420px;background:rgba(0,0,0,0.75);padding:20px;border-radius:15px;display:flex;flex-direction:column;
 gap:10px;backdrop-filter:blur(8px);}
 
@@ -21,7 +21,7 @@ gap:10px;backdrop-filter:blur(8px);}
 input,select,button{padding:12px;border:none;border-radius:8px;font-size:14px;outline:none;}
 
 /* # BOTONES */
-button{background:bluesky;color:white;font-weight:bold;cursor:pointer;transition:0.2s;}
+button{background:#1e90ff;color:white;font-weight:bold;cursor:pointer;transition:0.2s;}
 
 button:hover{background:#0fb10f;}
 
@@ -36,7 +36,7 @@ button:hover{background:#0fb10f;}
 <!-- # AUDIO DEL SISTEMA -->
 <audio id="clickSound" src="sound/Click.mp3"></audio>
 
-<!-- # PANTALLA LOGIN -->
+<!-- # LOGIN -->
 <div class="card" id="loginBox">
 <h3>INICIO DE SESIÓN</h3>
 <input id="email" placeholder="Correo electrónico">
@@ -45,7 +45,7 @@ button:hover{background:#0fb10f;}
 <button onclick="verifyCode()">Ingresar</button>
 </div>
 
-<!-- # PANTALLA PERFIL -->
+<!-- # PERFIL -->
 <div class="card hidden" id="profileBox">
 <h3>CONFIGURACIÓN DE PERFIL</h3>
 
@@ -64,27 +64,73 @@ button:hover{background:#0fb10f;}
 <button onclick="guardarPerfil()">Continuar</button>
 </div>
 
+<!-- # SINIESTRO -->
+<div class="card hidden" id="siniestroBox">
+<h3>GESTIÓN DE SINIESTRO</h3>
+
+<input placeholder="Código de siniestro">
+
+<h4>Documentos del evento</h4>
+<input type="file"><label>Remesa terrestre de carga</label>
+<input type="file"><label>Manifiesto de carga</label>
+<input type="file"><label>Guía de transporte</label>
+
+<h4>Documentos del vehículo</h4>
+<input type="file"><label>SOAT</label>
+<input type="file"><label>Tecnomecánica</label>
+<input type="file"><label>Póliza RCE</label>
+
+<h4>Documentos del conductor</h4>
+<input type="file"><label>Licencia conducción</label>
+<input type="file"><label>Documento identidad</label>
+
+<h4>Reclamación</h4>
+<input type="file"><label>Carta aseguradora</label>
+
+<button onclick="enviarSiniestro()">Enviar documentación</button>
+</div>
+
 <script>
 
 /* # SONIDO DEL SISTEMA */
-const sound=document.getElementById("clickSound");let generatedCode="";function playSound(){sound.currentTime=0;sound.play();}
+const sound=document.getElementById("clickSound");
+let generatedCode="";
+
+function playSound(){
+sound.currentTime=0;
+sound.play();
+}
 
 /* # LOGIN SIMULADO */
-function sendCode(){generatedCode=Math.floor(1000+Math.random()*9000);alert("Tu código es: "+generatedCode);}
+function sendCode(){
+generatedCode=Math.floor(1000+Math.random()*9000);
+alert("Tu código es: "+generatedCode);
+}
 
-function verifyCode(){let input=document.getElementById("codeInput").value;
+function verifyCode(){
+let input=document.getElementById("codeInput").value;
+
 if(input==generatedCode && generatedCode!=""){
 document.getElementById("loginBox").classList.add("hidden");
 document.getElementById("profileBox").classList.remove("hidden");
-}else{alert("Código incorrecto");}
+}else{
+alert("Código incorrecto");
+}
 }
 
 /* # FORMATO MAYÚSCULAS */
 function formatUpper(input){
-input.addEventListener("input",function(){this.value=this.value.trimStart().toUpperCase();});
-input.addEventListener("blur",function(){this.value=this.value.trim().toUpperCase();});}
+input.addEventListener("input",function(){
+this.value=this.value.trimStart().toUpperCase();
+});
+input.addEventListener("blur",function(){
+this.value=this.value.trim().toUpperCase();
+});
+}
 
-formatUpper(document.getElementById("empresa"));formatUpper(document.getElementById("nombre"));formatUpper(document.getElementById("apellidos"));
+formatUpper(document.getElementById("empresa"));
+formatUpper(document.getElementById("nombre"));
+formatUpper(document.getElementById("apellidos"));
 formatUpper(document.getElementById("cargo"));
 
 /* # VALIDACIÓN CELULAR */
@@ -94,7 +140,7 @@ celular.addEventListener("input",function(){
 this.value=this.value.replace(/\D/g,"");
 });
 
-/* # GUARDAR PERFIL */
+/* # GUARDAR PERFIL Y PASAR A SINIESTRO */
 function guardarPerfil(){
 
 playSound();
@@ -113,6 +159,16 @@ return;
 }
 
 alert("Perfil guardado correctamente");
+
+/* 👉 CAMBIO DE PANTALLA */
+document.getElementById("profileBox").classList.add("hidden");
+document.getElementById("siniestroBox").classList.remove("hidden");
+}
+
+/* # ENVÍO DE SINIESTRO */
+function enviarSiniestro(){
+playSound();
+alert("Documentación del siniestro enviada correctamente");
 }
 
 </script>
